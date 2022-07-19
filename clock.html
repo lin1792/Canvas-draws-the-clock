@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>时钟</title>
+</head>
+<body>
+  <canvas id="clock" width="800" height="600"></canvas>
+
+  <script>
+    let timer = document.querySelector("#clock")
+    let clo = timer.getContext('2d')
+    function clocker() {
+
+      // 清除画布
+      clo.clearRect(0, 0, 800, 600)
+
+      clo.save()
+      clo.translate(400, 300)
+      clo.rotate(-Math.PI / 2)
+
+      clo.save()
+      // 表盘
+      clo.beginPath()
+      clo.arc(0, 0, 200, 0, 2 * Math.PI)
+      clo.strokeStyle = "gray"
+      clo.lineWidth = "10"
+      clo.stroke()
+      clo.closePath()
+
+      // 刻度
+      for (let i = 0; i < 60; i++) {
+        clo.rotate(Math.PI / 30)
+        clo.beginPath()
+        clo.moveTo(180, 0)
+        clo.lineTo(190, 0)
+        clo.strokeStyle = "pink"
+        clo.lineWidth = "5"
+        clo.stroke()
+        clo.closePath()
+      }
+
+
+      clo.restore()
+      clo.save()
+      for (let i = 0; i < 12; i++) {
+        clo.rotate(Math.PI / 6)
+        clo.beginPath()
+        clo.moveTo(180, 0)
+        clo.lineTo(200, 0)
+        clo.strokeStyle = "gray"
+        clo.lineWidth = "10"
+        clo.stroke()
+        clo.closePath()
+      }
+      clo.restore()
+      clo.save()
+
+      // 绘制时间
+      // [135, 80],[80, 140],[-3, 165],[-85, 140],[-140, 80],[-160, 0],[-140, -80],[-85, -140],[-3, -165],[80, -140],[135, -80],[160, 0]
+
+      let arr = [[135, 80], [80, 140], [-3, 165], [-85, 140], [-140, 80], [-160, 0], [-140, -80], [-85, -140], [-3, -165], [80, -140], [135, -80], [160, -6]]
+      for (let i = 0; i < 12; i++) {
+        clo.translate(arr[i][0], arr[i][1])
+        clo.rotate(Math.PI / 2)
+        clo.beginPath()
+        clo.font = "30px Arial"
+        clo.fillText(i + 1, -10, 10)
+        clo.closePath()
+        clo.restore()
+        clo.save()
+      }
+
+      // 时间
+      let t = new Date()
+      let hour = t.getHours()
+      let min = t.getMinutes()
+      let sec = t.getSeconds()
+      console.log(t);
+      console.log(hour);
+      console.log(min);
+      console.log(sec);
+
+      // 秒针
+      clo.beginPath()
+      clo.rotate(2 * Math.PI / 60 * sec)
+      clo.moveTo(-20, 0)
+      clo.lineTo(175, 0)
+      clo.strokeStyle = "red"
+      clo.lineWidth = "2"
+      clo.stroke()
+      clo.closePath()
+
+      clo.restore()
+      clo.save()
+      // 分针
+      clo.beginPath()
+      clo.rotate(2 * Math.PI / 60 * min + 2 * Math.PI / 60 / 60 * sec)
+      clo.moveTo(-15, 0)
+      clo.lineTo(160, 0)
+      clo.strokeStyle = "yellow"
+      clo.lineWidth = "3.5"
+      clo.stroke()
+      clo.closePath()
+
+      clo.restore()
+      clo.save()
+      // 时针
+      clo.beginPath()
+      clo.rotate(2 * Math.PI / 12 * hour + 2 * Math.PI / 60 / 12 * min + 2 * Math.PI / 60 / 60 / 12 * sec)
+      clo.moveTo(-10, 0)
+      clo.lineTo(145, 0)
+      clo.strokeStyle = "green"
+      clo.lineWidth = "5"
+      clo.stroke()
+      clo.closePath()
+
+      clo.beginPath()
+      clo.arc(0, 0, 7, 0, 2 * Math.PI)
+      clo.fillStyle = "red"
+      clo.fill()
+      clo.closePath()
+
+      clo.restore()
+      clo.restore()
+
+    }
+    clocker()
+    setInterval(function () {
+      clocker()
+    }, 1000)
+
+
+  </script>
+
+</body>
+</html>
